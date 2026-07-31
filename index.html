@@ -9,7 +9,1328 @@
     />
     <meta name="theme-color" content="#050a12" />
     <title>THz Circular Waveguide Live Simulator</title>
-    <link rel="stylesheet" href="styles.css" />
+    <style>
+:root {
+  color-scheme: dark;
+  --bg: #050a12;
+  --bg-soft: #07101a;
+  --panel: #0b1623;
+  --panel-2: #0e1b2a;
+  --line: #1d3448;
+  --line-bright: #31516b;
+  --cyan: #32d7e7;
+  --cyan-2: #0fb7c7;
+  --amber: #f5a524;
+  --amber-2: #ff7847;
+  --text: #edf6fa;
+  --muted: #8aa0b4;
+  --muted-2: #5f7589;
+  --danger: #ff5577;
+  --radius: 12px;
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.26);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 53% 14%, rgba(18, 98, 137, 0.16), transparent 31rem),
+    linear-gradient(180deg, #040810 0%, var(--bg) 52%, #06101a 100%);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(96, 151, 180, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(96, 151, 180, 0.025) 1px, transparent 1px);
+  background-size: 42px 42px;
+  content: "";
+  mask-image: linear-gradient(to bottom, black, transparent 86%);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  min-height: 58px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px clamp(16px, 2.4vw, 38px);
+  border-bottom: 1px solid rgba(75, 112, 141, 0.32);
+  background: rgba(4, 9, 16, 0.88);
+  backdrop-filter: blur(18px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 520;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+
+.brand strong {
+  color: var(--cyan);
+  font-weight: 650;
+}
+
+.brand-mark {
+  position: relative;
+  width: 35px;
+  height: 35px;
+  flex: 0 0 auto;
+  border: 1px solid #b8d4e2;
+  border-radius: 50%;
+}
+
+.brand-mark::before,
+.brand-mark::after,
+.brand-mark span {
+  position: absolute;
+  content: "";
+}
+
+.brand-mark::before {
+  top: 50%;
+  left: -7px;
+  width: 47px;
+  border-top: 1px solid #64889d;
+}
+
+.brand-mark::after {
+  top: -7px;
+  left: 50%;
+  height: 47px;
+  border-left: 1px solid #64889d;
+}
+
+.brand-mark span {
+  inset: 9px;
+  border: 1px solid var(--cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 14px rgba(50, 215, 231, 0.35);
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.live-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 4px;
+  color: var(--cyan);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.live-indicator i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 0 0 rgba(50, 215, 231, 0.55);
+  animation: live-pulse 2.4s infinite;
+}
+
+.icon-button {
+  display: inline-flex;
+  height: 36px;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(10, 21, 33, 0.7);
+  color: #c7d7e0;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: 140ms ease;
+}
+
+.icon-button span {
+  color: var(--cyan);
+  font-size: 17px;
+  line-height: 1;
+}
+
+.icon-button:hover,
+.icon-button:focus-visible {
+  border-color: var(--cyan-2);
+  background: rgba(19, 57, 74, 0.6);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+main {
+  width: min(1880px, 100%);
+  margin: 0 auto;
+  padding: 0 clamp(12px, 1.7vw, 28px) 28px;
+}
+
+.hero {
+  display: flex;
+  min-height: 122px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px 4px 16px;
+}
+
+.eyebrow {
+  margin: 0 0 5px;
+  color: var(--cyan);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(26px, 2.35vw, 42px);
+  font-weight: 650;
+  letter-spacing: -0.035em;
+}
+
+.hero p:not(.eyebrow) {
+  max-width: 800px;
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: clamp(12px, 1vw, 15px);
+  line-height: 1.5;
+}
+
+.hero-spec {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 5px 18px;
+  padding: 11px 14px;
+  border: 1px solid rgba(49, 81, 107, 0.65);
+  border-radius: 10px;
+  background: rgba(9, 19, 30, 0.65);
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.hero-spec span {
+  grid-row: span 2;
+  align-self: center;
+  padding-right: 16px;
+  border-right: 1px solid var(--line);
+  color: var(--amber);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.hero-spec b {
+  color: #c7d7e0;
+  font-weight: 620;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.8fr) minmax(500px, 1.75fr) minmax(288px, 0.84fr);
+  gap: 12px;
+  align-items: stretch;
+}
+
+.panel {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(145deg, rgba(13, 28, 43, 0.96), rgba(7, 16, 26, 0.96)),
+    var(--panel);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025), var(--shadow);
+}
+
+.panel-heading {
+  display: flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 14px;
+  border-bottom: 1px solid rgba(49, 81, 107, 0.55);
+}
+
+.panel-heading.compact {
+  min-height: 44px;
+  padding-block: 8px;
+}
+
+.panel-heading > div:first-child {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+}
+
+.section-number {
+  color: var(--cyan);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.panel h2,
+.method-strip h2 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 720;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.material-pill,
+.solver-time {
+  padding: 4px 7px;
+  border: 1px solid rgba(245, 165, 36, 0.35);
+  border-radius: 999px;
+  color: var(--amber);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mode-fieldset {
+  margin: 0;
+  padding: 14px 14px 8px;
+  border: 0;
+}
+
+.mode-fieldset legend {
+  padding: 0;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.mode-button {
+  min-height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #091522;
+  color: #9db0c0;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 620;
+  transition: 140ms ease;
+}
+
+.mode-button:hover,
+.mode-button:focus-visible {
+  border-color: var(--line-bright);
+  color: var(--text);
+  outline: none;
+}
+
+.mode-button.active {
+  border-color: var(--cyan);
+  background: linear-gradient(180deg, #35d9e8, #13b7c7);
+  box-shadow: 0 0 18px rgba(50, 215, 231, 0.16);
+  color: #041017;
+}
+
+.mode-button sub {
+  font-size: 8px;
+}
+
+.control-list {
+  display: grid;
+  gap: 1px;
+  padding: 2px 14px 10px;
+}
+
+.control {
+  padding: 9px 0 10px;
+  border-bottom: 1px solid rgba(49, 81, 107, 0.26);
+}
+
+.control:last-child {
+  border-bottom: 0;
+}
+
+.control-label {
+  display: flex;
+  min-height: 32px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.control label {
+  color: #c8d7df;
+  font-size: 11px;
+  font-weight: 570;
+}
+
+.number-wrap {
+  display: grid;
+  grid-template-columns: minmax(48px, 1fr) auto;
+  min-width: 108px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #08131f;
+}
+
+.number-wrap input {
+  min-width: 0;
+  height: 30px;
+  padding: 0 7px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 650;
+  text-align: right;
+}
+
+.number-wrap span {
+  display: flex;
+  align-items: center;
+  padding: 0 7px;
+  border-left: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  opacity: 0;
+}
+
+input[type="range"] {
+  width: 100%;
+  height: 15px;
+  margin: 5px 0 0;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--cyan) var(--fill, 50%), #223445 var(--fill, 50%));
+}
+
+input[type="range"]::-moz-range-track {
+  height: 3px;
+  border-radius: 999px;
+  background: #223445;
+}
+
+input[type="range"]::-moz-range-progress {
+  height: 3px;
+  border-radius: 999px;
+  background: var(--cyan);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  width: 13px;
+  height: 13px;
+  margin-top: -5px;
+  appearance: none;
+  border: 2px solid #c8eef3;
+  border-radius: 50%;
+  background: #17364a;
+  box-shadow: 0 0 0 3px rgba(50, 215, 231, 0.08);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border: 2px solid #c8eef3;
+  border-radius: 50%;
+  background: #17364a;
+}
+
+.range-ends {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted-2);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 8px;
+}
+
+.assumption {
+  margin: 2px 14px 14px;
+  padding: 10px;
+  border-left: 2px solid var(--amber);
+  border-radius: 0 7px 7px 0;
+  background: rgba(245, 165, 36, 0.055);
+}
+
+.assumption span {
+  color: var(--amber);
+  font-size: 8px;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.assumption p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.visual-column {
+  display: grid;
+  min-width: 0;
+  grid-template-rows: minmax(430px, 1fr) minmax(215px, 0.46fr);
+  gap: 12px;
+}
+
+.field-panel,
+.spectrum-panel {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+}
+
+.field-meta {
+  display: flex;
+  gap: 6px;
+}
+
+.field-meta span {
+  padding: 4px 7px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--muted);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 9px;
+}
+
+.field-meta span:first-child {
+  border-color: rgba(50, 215, 231, 0.35);
+  color: var(--cyan);
+}
+
+.canvas-wrap {
+  position: relative;
+  min-width: 0;
+}
+
+.field-canvas-wrap {
+  flex: 1 1 auto;
+  min-height: 360px;
+  padding: 8px 44px 2px 12px;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.axis-label {
+  position: absolute;
+  color: #9db0c0;
+  font-family: Georgia, serif;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.x-axis {
+  right: 38px;
+  bottom: 49%;
+}
+
+.y-axis {
+  top: 12px;
+  left: 49%;
+}
+
+.colorbar {
+  position: absolute;
+  top: 17%;
+  right: 12px;
+  display: grid;
+  height: 66%;
+  grid-template-rows: auto 1fr auto 1fr auto;
+  align-items: center;
+  color: var(--muted);
+  font-size: 8px;
+  text-align: center;
+}
+
+.colorbar::before {
+  position: absolute;
+  top: 11px;
+  bottom: 11px;
+  left: -7px;
+  width: 5px;
+  border-radius: 4px;
+  background: linear-gradient(#ff7043, #f6b73c 24%, #1dd6da 50%, #1454ba 74%, #071e57);
+  content: "";
+}
+
+.colorbar i {
+  width: 5px;
+}
+
+.field-status {
+  position: absolute;
+  right: 43px;
+  bottom: 12px;
+  padding: 5px 8px;
+  border: 1px solid rgba(50, 215, 231, 0.5);
+  border-radius: 5px;
+  background: rgba(5, 17, 26, 0.85);
+  color: var(--cyan);
+  font-size: 8px;
+  font-weight: 750;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.field-status.evanescent {
+  border-color: rgba(255, 85, 119, 0.65);
+  color: var(--danger);
+}
+
+.field-caption {
+  display: flex;
+  min-height: 31px;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 5px 10px 8px;
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.field-caption span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-swatch.heat {
+  width: 18px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #1454ba, #1dd6da, #f6b73c);
+}
+
+.legend-arrow {
+  color: #e9fbff;
+  font-style: normal;
+  font-size: 13px;
+}
+
+.chart-note {
+  color: var(--muted-2);
+  font-size: 8px;
+}
+
+.chart-wrap {
+  flex: 1 1 auto;
+  min-height: 130px;
+  padding: 3px 8px 0;
+  touch-action: none;
+}
+
+.chart-legend {
+  display: flex;
+  min-height: 26px;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.line {
+  display: inline-block;
+  width: 18px;
+  margin-right: 5px;
+  border-top: 2px solid;
+  vertical-align: middle;
+}
+
+.line.cyan {
+  border-color: var(--cyan);
+}
+
+.line.amber {
+  border-color: var(--amber);
+}
+
+.line.dashed {
+  border-color: #8aa0b4;
+  border-top-style: dashed;
+}
+
+.chart-tooltip {
+  position: absolute;
+  z-index: 4;
+  min-width: 112px;
+  padding: 7px 8px;
+  pointer-events: none;
+  border: 1px solid var(--line-bright);
+  border-radius: 6px;
+  background: rgba(4, 12, 20, 0.94);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  color: var(--muted);
+  font-size: 8px;
+  line-height: 1.55;
+}
+
+.chart-tooltip b {
+  color: var(--text);
+}
+
+.results-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric {
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid rgba(49, 81, 107, 0.62);
+  border-radius: 9px;
+  background: linear-gradient(145deg, rgba(11, 27, 42, 0.84), rgba(7, 16, 26, 0.62));
+}
+
+.metric.primary {
+  position: relative;
+  display: flex;
+  min-height: 105px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 12px 12px 8px;
+  overflow: hidden;
+  border-color: rgba(50, 215, 231, 0.28);
+}
+
+.metric.primary::after {
+  position: absolute;
+  right: -25px;
+  bottom: -40px;
+  width: 120px;
+  height: 120px;
+  border: 1px solid rgba(50, 215, 231, 0.12);
+  border-radius: 50%;
+  content: "";
+}
+
+.metric > span,
+.metric-copy > span {
+  display: block;
+  color: #a5b7c4;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.metric strong,
+.metric-copy strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--cyan);
+  font-size: clamp(19px, 1.65vw, 28px);
+  font-weight: 620;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.metric strong small,
+.metric-copy strong small {
+  color: #b7cbd6;
+  font-size: 9px;
+  font-weight: 520;
+  letter-spacing: 0;
+}
+
+.metric em,
+.metric-copy em {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted-2);
+  font-family: Georgia, serif;
+  font-size: 9px;
+}
+
+.mini-cutoff {
+  position: relative;
+  width: 82px;
+  height: 50px;
+  flex: 0 0 auto;
+  margin-right: 6px;
+  border-bottom: 1px solid var(--muted-2);
+  border-left: 1px solid var(--muted-2);
+}
+
+.mini-cutoff i {
+  position: absolute;
+  right: 3px;
+  bottom: 0;
+  width: 72px;
+  height: 43px;
+  border-top: 2px solid var(--cyan);
+  border-radius: 90% 10% 0 0;
+  transform: skewX(-24deg) rotate(-12deg);
+}
+
+.mini-cutoff span {
+  position: absolute;
+  bottom: -17px;
+  left: 8px;
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  padding: 0 12px 9px;
+}
+
+.metric-grid .metric {
+  min-height: 91px;
+}
+
+.amber-metric strong {
+  color: var(--amber);
+}
+
+.status-card {
+  display: flex;
+  min-height: 52px;
+  align-items: center;
+  gap: 10px;
+  margin: 0 12px 9px;
+  padding: 9px 11px;
+  border: 1px solid rgba(50, 215, 231, 0.5);
+  border-radius: 8px;
+  background: rgba(18, 98, 137, 0.08);
+}
+
+.status-card.evanescent {
+  border-color: rgba(255, 85, 119, 0.58);
+  background: rgba(255, 85, 119, 0.05);
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 12px rgba(50, 215, 231, 0.55);
+}
+
+.evanescent .status-dot {
+  background: var(--danger);
+  box-shadow: 0 0 12px rgba(255, 85, 119, 0.45);
+}
+
+.status-card b {
+  display: block;
+  color: var(--cyan);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.status-card.evanescent b {
+  color: var(--danger);
+}
+
+.status-card small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.mode-facts {
+  display: grid;
+  gap: 0;
+  margin: auto 12px 12px;
+  overflow: hidden;
+  border: 1px solid rgba(49, 81, 107, 0.5);
+  border-radius: 8px;
+}
+
+.mode-facts div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 9px;
+  border-bottom: 1px solid rgba(49, 81, 107, 0.35);
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.mode-facts div:last-child {
+  border-bottom: 0;
+}
+
+.mode-facts b {
+  color: #cad8df;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 8px;
+  font-weight: 550;
+}
+
+.method-strip {
+  display: grid;
+  grid-template-columns: 1.35fr repeat(4, auto) 2fr;
+  gap: 12px;
+  align-items: center;
+  margin-top: 12px;
+  padding: 13px 15px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(8, 18, 29, 0.78);
+}
+
+.method-strip > div:first-child {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.equation {
+  padding: 7px 9px;
+  border: 1px solid rgba(49, 81, 107, 0.45);
+  border-radius: 6px;
+  color: #c9d9e2;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.method-strip p {
+  margin: 0;
+  color: var(--muted-2);
+  font-size: 8px;
+  line-height: 1.55;
+}
+
+.theory-section {
+  margin-top: 12px;
+  padding: clamp(18px, 2.4vw, 30px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at 88% 5%, rgba(50, 215, 231, 0.075), transparent 25rem),
+    linear-gradient(145deg, rgba(10, 23, 36, 0.96), rgba(6, 14, 23, 0.96));
+  box-shadow: var(--shadow);
+}
+
+.theory-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(49, 81, 107, 0.55);
+}
+
+.theory-heading h2 {
+  margin: 0;
+  font-size: clamp(22px, 2vw, 32px);
+  font-weight: 650;
+  letter-spacing: -0.025em;
+}
+
+.theory-heading > p {
+  max-width: 640px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+.theory-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.theory-card {
+  position: relative;
+  min-width: 0;
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(49, 81, 107, 0.65);
+  border-radius: 10px;
+  background: linear-gradient(145deg, rgba(13, 30, 45, 0.82), rgba(7, 16, 26, 0.68));
+}
+
+.theory-card::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 70px;
+  border-top: 1px solid rgba(50, 215, 231, 0.45);
+  content: "";
+}
+
+.theory-number {
+  color: var(--cyan);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+}
+
+.theory-card h3,
+.symbol-table-wrap h3 {
+  margin: 8px 0 10px;
+  font-size: 13px;
+  font-weight: 720;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.theory-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.68;
+}
+
+.theory-equation {
+  margin: 14px 0;
+  padding: 11px 12px;
+  overflow-x: auto;
+  border: 1px solid rgba(50, 215, 231, 0.2);
+  border-left: 2px solid var(--cyan);
+  border-radius: 0 7px 7px 0;
+  background: rgba(5, 16, 25, 0.7);
+  color: #d9f5f7;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.caution-card {
+  border-color: rgba(245, 165, 36, 0.35);
+}
+
+.caution-card::after {
+  border-color: var(--amber);
+}
+
+.caution-card .theory-number {
+  color: var(--amber);
+}
+
+.theory-note {
+  margin: 13px 0;
+  padding: 10px 11px;
+  border-left: 2px solid var(--amber);
+  background: rgba(245, 165, 36, 0.06);
+  color: #c8ad7f;
+  font-size: 9px;
+  line-height: 1.55;
+}
+
+.symbol-table-wrap {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(49, 81, 107, 0.55);
+}
+
+.symbol-table-wrap h3 {
+  margin-top: 0;
+}
+
+.symbol-table {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--line);
+}
+
+.symbol-table span {
+  padding: 9px 11px;
+  background: #091522;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.symbol-table b {
+  margin-right: 5px;
+  color: var(--cyan);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 11px;
+}
+
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px clamp(16px, 2.4vw, 38px) 24px;
+  color: var(--muted-2);
+  font-size: 8px;
+  letter-spacing: 0.04em;
+}
+
+.noscript {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 30px;
+  background: var(--bg);
+  color: var(--text);
+  text-align: center;
+}
+
+@keyframes live-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(50, 215, 231, 0.5);
+  }
+  60%,
+  100% {
+    box-shadow: 0 0 0 9px rgba(50, 215, 231, 0);
+  }
+}
+
+@media (max-width: 1180px) {
+  .workspace {
+    grid-template-columns: minmax(260px, 0.72fr) minmax(480px, 1.45fr);
+  }
+
+  .results-panel {
+    grid-column: 1 / -1;
+  }
+
+  .metric.primary {
+    min-height: 95px;
+  }
+
+  .metric-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .method-strip {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .method-strip > div:first-child,
+  .method-strip p {
+    grid-column: span 2;
+  }
+
+  .theory-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 790px) {
+  .topbar {
+    position: relative;
+  }
+
+  .brand {
+    font-size: 12px;
+  }
+
+  .live-indicator {
+    display: none;
+  }
+
+  .icon-button {
+    width: 36px;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0;
+    color: transparent;
+  }
+
+  .icon-button span {
+    color: var(--cyan);
+  }
+
+  .hero {
+    display: block;
+    padding-block: 18px;
+  }
+
+  .hero-spec {
+    display: none;
+  }
+
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .controls-panel,
+  .results-panel {
+    grid-column: auto;
+  }
+
+  .visual-column {
+    grid-template-rows: 480px 250px;
+  }
+
+  .metric-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .method-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .method-strip > div:first-child,
+  .method-strip p {
+    grid-column: 1 / -1;
+  }
+
+  .theory-heading {
+    display: block;
+  }
+
+  .theory-heading > p {
+    margin-top: 10px;
+  }
+
+  .symbol-table {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  main {
+    padding-inline: 8px;
+  }
+
+  .brand strong {
+    display: none;
+  }
+
+  .visual-column {
+    grid-template-rows: 420px 235px;
+  }
+
+  .field-canvas-wrap {
+    min-height: 320px;
+    padding-right: 33px;
+  }
+
+  .colorbar {
+    right: 7px;
+  }
+
+  .field-caption {
+    gap: 8px;
+  }
+
+  .field-caption span:last-child {
+    display: none;
+  }
+
+  .chart-note {
+    display: none;
+  }
+
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .method-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .method-strip > div:first-child,
+  .method-strip p {
+    grid-column: auto;
+  }
+
+  .theory-grid,
+  .symbol-table {
+    grid-template-columns: 1fr;
+  }
+
+  footer {
+    display: grid;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+    </style>
   </head>
   <body>
     <header class="topbar">
@@ -282,6 +1603,154 @@
           aberrations are not included.
         </p>
       </section>
+
+      <section class="theory-section" id="theory">
+        <div class="theory-heading">
+          <div>
+            <p class="eyebrow">Reference notes</p>
+            <h2>Theory behind the simulation</h2>
+          </div>
+          <p>
+            The model combines ideal circular-waveguide eigenmodes, Gaussian
+            beam optics, overlap-integral coupling, and a first-order copper
+            surface-loss correction.
+          </p>
+        </div>
+
+        <div class="theory-grid">
+          <article class="theory-card">
+            <span class="theory-number">01</span>
+            <h3>Circular-waveguide modes</h3>
+            <p>
+              In a uniform, air-filled circular guide, the longitudinal field
+              satisfies the scalar Helmholtz equation. Separation in cylindrical
+              coordinates gives radial solutions proportional to Bessel
+              functions:
+            </p>
+            <div class="theory-equation">
+              Ψ<sub>mn</sub>(r,φ) = J<sub>m</sub>(k<sub>c</sub>r)
+              {cos(mφ), sin(mφ)}
+            </div>
+            <p>
+              TE modes have E<sub>z</sub> = 0 and use roots χ′<sub>mn</sub> of
+              J′<sub>m</sub>. TM modes have H<sub>z</sub> = 0 and use roots
+              χ<sub>mn</sub> of J<sub>m</sub>. The dominant circular-guide mode
+              is TE<sub>11</sub>, with χ′<sub>11</sub> = 1.84118.
+            </p>
+          </article>
+
+          <article class="theory-card">
+            <span class="theory-number">02</span>
+            <h3>Cutoff and propagation</h3>
+            <p>
+              For guide radius a, the transverse wavenumber is
+              k<sub>c</sub> = χ/a. Each mode propagates only when the operating
+              frequency exceeds its cutoff:
+            </p>
+            <div class="theory-equation">
+              f<sub>c</sub> = cχ/(2πa), &nbsp;
+              β = √(k<sub>0</sub>² − k<sub>c</sub>²)
+            </div>
+            <p>
+              Above cutoff, β is real and power travels along the tube. Below
+              cutoff, β is imaginary and the field is evanescent. Waveguide
+              dispersion also makes the group velocity
+              v<sub>g</sub> = c√(1 − (f<sub>c</sub>/f)²), producing delay relative
+              to free space.
+            </p>
+          </article>
+
+          <article class="theory-card">
+            <span class="theory-number">03</span>
+            <h3>Gaussian focusing</h3>
+            <p>
+              A collimated Gaussian THz beam illuminating a thin lens is focused
+              to an approximate 1/e electric-field waist:
+            </p>
+            <div class="theory-equation">
+              w<sub>0</sub> = λf/(πw<sub>L</sub>)
+            </div>
+            <p>
+              Here λ is the free-space wavelength, f is the lens focal length,
+              and w<sub>L</sub> is the Gaussian radius on the lens. The simulator
+              lets w<sub>L</sub> vary as a fraction of the lens radius. A shorter
+              focal length or a more fully illuminated lens produces a smaller
+              focused waist.
+            </p>
+          </article>
+
+          <article class="theory-card">
+            <span class="theory-number">04</span>
+            <h3>Mode coupling</h3>
+            <p>
+              Coupling is evaluated from the normalized transverse-field overlap
+              between the centered, x-polarized Gaussian beam and the selected
+              waveguide eigenmode:
+            </p>
+            <div class="theory-equation">
+              η = |∬ E<sub>G</sub>·E<sub>mode</sub>* dA|² /
+              (∬|E<sub>G</sub>|²dA ∬|E<sub>mode</sub>|²dA)
+            </div>
+            <p>
+              The result includes the fraction of Gaussian power entering the
+              circular aperture. Symmetry can make the overlap of a centered
+              beam with some modes zero even when those modes are above cutoff.
+            </p>
+          </article>
+
+          <article class="theory-card">
+            <span class="theory-number">05</span>
+            <h3>Copper-wall attenuation</h3>
+            <p>
+              Finite copper conductivity creates a surface resistance that
+              increases with the square root of frequency:
+            </p>
+            <div class="theory-equation">
+              R<sub>s</sub> = √(πfμ<sub>0</sub>/σ<sub>Cu</sub>),
+              &nbsp; σ<sub>Cu</sub> = 5.8×10⁷ S m⁻¹
+            </div>
+            <p>
+              The wall-loss power is obtained from the tangential magnetic field
+              at r = a. The resulting attenuation α gives conductor loss in
+              dB m⁻¹ and output power
+              P<sub>out</sub>/P<sub>in</sub> = η exp(−2αL).
+            </p>
+          </article>
+
+          <article class="theory-card caution-card">
+            <span class="theory-number">06</span>
+            <h3>Interpretation and limits</h3>
+            <p>
+              This is a rapid analytical design model, not a full 3D FEM or FDTD
+              calculation. It assumes a straight, uniform circular tube, an
+              ideal thin lens, an aligned centered beam, and smooth copper walls.
+            </p>
+            <div class="theory-note">
+              Not included: flange reflections, lens aberrations, beam tilt or
+              offset, surface roughness, bends, discontinuities, dielectric
+              windows, and mode conversion along the tube.
+            </div>
+            <p>
+              Use the results for parameter exploration, then validate a final
+              design with measurement or a calibrated full-wave solver.
+            </p>
+          </article>
+        </div>
+
+        <div class="symbol-table-wrap">
+          <h3>Symbols used</h3>
+          <div class="symbol-table">
+            <span><b>a</b> waveguide radius</span>
+            <span><b>L</b> tube length</span>
+            <span><b>χ, χ′</b> Bessel roots</span>
+            <span><b>β</b> propagation constant</span>
+            <span><b>w<sub>0</sub></b> focused waist</span>
+            <span><b>w<sub>L</sub></b> beam radius at lens</span>
+            <span><b>η</b> modal coupling</span>
+            <span><b>α</b> field attenuation</span>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer>
@@ -292,6 +1761,935 @@
     <noscript>
       <div class="noscript">JavaScript is required for the live electromagnetic simulation.</div>
     </noscript>
-    <script src="app.js"></script>
+    <script>
+(() => {
+  "use strict";
+
+  const C0 = 299792458;
+  const MU0 = 4 * Math.PI * 1e-7;
+  const EPS0 = 1 / (MU0 * C0 * C0);
+  const COPPER_SIGMA = 5.8e7;
+  const DB_PER_NEPER = 8.685889638;
+  const TWO_PI = 2 * Math.PI;
+
+  const MODES = {
+    TE11: { family: "TE", m: 1, n: 1, root: 1.841183781, orientation: "sin" },
+    TM01: { family: "TM", m: 0, n: 1, root: 2.404825558, orientation: "cos" },
+    TE21: { family: "TE", m: 2, n: 1, root: 3.054236928, orientation: "cos" },
+    TE01: { family: "TE", m: 0, n: 1, root: 3.831705970, orientation: "cos" },
+    TM11: { family: "TM", m: 1, n: 1, root: 3.831705970, orientation: "cos" },
+    TE12: { family: "TE", m: 1, n: 2, root: 5.331442774, orientation: "sin" },
+  };
+
+  const DEFAULTS = {
+    frequencyTHz: 1,
+    diameterMM: 2,
+    lengthCM: 40,
+    focalMM: 100,
+    lensDiameterMM: 50.8,
+    fill: 1,
+    mode: "TE11",
+  };
+
+  const CONTROL_MAP = {
+    frequency: { key: "frequencyTHz", range: "frequencyRange", number: "frequencyNumber" },
+    diameter: { key: "diameterMM", range: "diameterRange", number: "diameterNumber" },
+    length: { key: "lengthCM", range: "lengthRange", number: "lengthNumber" },
+    focal: { key: "focalMM", range: "focalRange", number: "focalNumber" },
+    lensDiameter: {
+      key: "lensDiameterMM",
+      range: "lensDiameterRange",
+      number: "lensDiameterNumber",
+    },
+    fill: { key: "fill", range: "fillRange", number: "fillNumber" },
+  };
+
+  const state = { ...DEFAULTS };
+  const spatialCaches = new Map();
+  const element = {};
+  let renderQueued = false;
+  let chartState = null;
+  let chartDragging = false;
+
+  function factorial(n) {
+    let value = 1;
+    for (let i = 2; i <= n; i += 1) value *= i;
+    return value;
+  }
+
+  function besselJ(n, x) {
+    let term = Math.pow(x / 2, n) / factorial(n);
+    let sum = term;
+    for (let k = 1; k < 60; k += 1) {
+      term *= -(x * x * 0.25) / (k * (k + n));
+      sum += term;
+      if (Math.abs(term) < 1e-14 * Math.max(1, Math.abs(sum))) break;
+    }
+    return sum;
+  }
+
+  function besselPrime(n, x) {
+    if (n === 0) return -besselJ(1, x);
+    return 0.5 * (besselJ(n - 1, x) - besselJ(n + 1, x));
+  }
+
+  function angularTerms(mode, phi) {
+    if (mode.m === 0) return { angular: 1, derivative: 0 };
+    const angle = mode.m * phi;
+    if (mode.orientation === "sin") {
+      return {
+        angular: Math.sin(angle),
+        derivative: mode.m * Math.cos(angle),
+      };
+    }
+    return {
+      angular: Math.cos(angle),
+      derivative: -mode.m * Math.sin(angle),
+    };
+  }
+
+  function scalarAndGradient(x, y, mode) {
+    const r = Math.hypot(x, y);
+    if (r > 1.000001) return null;
+
+    if (r < 1e-9) {
+      if (mode.m === 0) {
+        return { psi: 1, gx: 0, gy: 0 };
+      }
+      if (mode.m === 1) {
+        const centerSlope = mode.root * 0.5;
+        return mode.orientation === "sin"
+          ? { psi: 0, gx: 0, gy: centerSlope }
+          : { psi: 0, gx: centerSlope, gy: 0 };
+      }
+      return { psi: 0, gx: 0, gy: 0 };
+    }
+
+    const phi = Math.atan2(y, x);
+    const cosPhi = x / r;
+    const sinPhi = y / r;
+    const { angular, derivative } = angularTerms(mode, phi);
+    const radial = besselJ(mode.m, mode.root * r);
+    const radialDerivative = mode.root * besselPrime(mode.m, mode.root * r) * angular;
+    const angularDerivative = (radial * derivative) / r;
+
+    return {
+      psi: radial * angular,
+      gx: radialDerivative * cosPhi - angularDerivative * sinPhi,
+      gy: radialDerivative * sinPhi + angularDerivative * cosPhi,
+    };
+  }
+
+  function getSpatialCache(modeKey) {
+    if (spatialCaches.has(modeKey)) return spatialCaches.get(modeKey);
+
+    const mode = MODES[modeKey];
+    const resolution = 121;
+    const step = 2 / (resolution - 1);
+    const points = [];
+    let gradientIntegral = 0;
+
+    for (let row = 0; row < resolution; row += 1) {
+      const y = 1 - row * step;
+      for (let col = 0; col < resolution; col += 1) {
+        const x = -1 + col * step;
+        const sample = scalarAndGradient(x, y, mode);
+        if (!sample) continue;
+
+        const baseEx = mode.family === "TE" ? -sample.gy : -sample.gx;
+        const baseEy = mode.family === "TE" ? sample.gx : -sample.gy;
+        points.push({ row, col, x, y, ...sample, baseEx, baseEy });
+        gradientIntegral += (sample.gx * sample.gx + sample.gy * sample.gy) * step * step;
+      }
+    }
+
+    const cache = { resolution, step, points, gradientIntegral };
+    spatialCaches.set(modeKey, cache);
+    return cache;
+  }
+
+  function overlapEfficiency(modeKey, radius, waist) {
+    const cache = getSpatialCache(modeKey);
+    let overlap = 0;
+    let gaussianNorm = 0;
+    let modeNorm = 0;
+    const areaWeight = cache.step * cache.step;
+
+    for (const point of cache.points) {
+      const physicalRadius = Math.hypot(point.x, point.y) * radius;
+      const gaussian = Math.exp(-Math.pow(physicalRadius / waist, 2));
+      overlap += gaussian * point.baseEx * areaWeight;
+      gaussianNorm += gaussian * gaussian * areaWeight;
+      modeNorm +=
+        (point.baseEx * point.baseEx + point.baseEy * point.baseEy) * areaWeight;
+    }
+
+    const denominator = gaussianNorm * modeNorm;
+    return denominator > 0 ? Math.min(1, Math.max(0, (overlap * overlap) / denominator)) : 0;
+  }
+
+  function conductorLoss(modeKey, frequencyHz, radius, beta) {
+    if (!(beta > 0)) return { alpha: Number.NaN, dbPerM: Number.NaN };
+
+    const mode = MODES[modeKey];
+    const cache = getSpatialCache(modeKey);
+    const omega = TWO_PI * frequencyHz;
+    const boundarySamples = 720;
+    const dPhi = TWO_PI / boundarySamples;
+    let boundaryMagneticIntegral = 0;
+
+    if (mode.family === "TE") {
+      const eFactor = (omega * MU0 * radius) / (mode.root * mode.root);
+      const hFactor = (beta * radius) / (mode.root * mode.root);
+      const guidedPower =
+        0.5 * eFactor * hFactor * radius * radius * cache.gradientIntegral;
+
+      for (let i = 0; i < boundarySamples; i += 1) {
+        const phi = (i + 0.5) * dPhi;
+        const { angular, derivative } = angularTerms(mode, phi);
+        const psiBoundary = besselJ(mode.m, mode.root) * angular;
+        const tangentialGradient = besselJ(mode.m, mode.root) * derivative;
+        const hPhi = hFactor * tangentialGradient;
+        boundaryMagneticIntegral += hPhi * hPhi + psiBoundary * psiBoundary;
+      }
+
+      boundaryMagneticIntegral *= radius * dPhi;
+      const surfaceResistance = Math.sqrt(
+        (Math.PI * frequencyHz * MU0) / COPPER_SIGMA,
+      );
+      const wallLoss = 0.5 * surfaceResistance * boundaryMagneticIntegral;
+      const alpha = wallLoss / (2 * guidedPower);
+      return { alpha, dbPerM: DB_PER_NEPER * alpha };
+    }
+
+    const eFactor = (beta * radius) / (mode.root * mode.root);
+    const hFactor = (omega * EPS0 * radius) / (mode.root * mode.root);
+    const guidedPower =
+      0.5 * eFactor * hFactor * radius * radius * cache.gradientIntegral;
+
+    for (let i = 0; i < boundarySamples; i += 1) {
+      const phi = (i + 0.5) * dPhi;
+      const { angular } = angularTerms(mode, phi);
+      const radialGradient = mode.root * besselPrime(mode.m, mode.root) * angular;
+      const hPhi = hFactor * radialGradient;
+      boundaryMagneticIntegral += hPhi * hPhi;
+    }
+
+    boundaryMagneticIntegral *= radius * dPhi;
+    const surfaceResistance = Math.sqrt(
+      (Math.PI * frequencyHz * MU0) / COPPER_SIGMA,
+    );
+    const wallLoss = 0.5 * surfaceResistance * boundaryMagneticIntegral;
+    const alpha = wallLoss / (2 * guidedPower);
+    return { alpha, dbPerM: DB_PER_NEPER * alpha };
+  }
+
+  function solve(parameters = state) {
+    const mode = MODES[parameters.mode];
+    const frequencyHz = parameters.frequencyTHz * 1e12;
+    const radius = parameters.diameterMM * 0.5e-3;
+    const length = parameters.lengthCM * 1e-2;
+    const focalLength = parameters.focalMM * 1e-3;
+    const lensDiameter = parameters.lensDiameterMM * 1e-3;
+    const illuminatedLensRadius = parameters.fill * lensDiameter * 0.5;
+    const wavelength = C0 / frequencyHz;
+    const waist = (wavelength * focalLength) / (Math.PI * illuminatedLensRadius);
+    const numericalAperture = Math.sin(Math.atan((lensDiameter * 0.5) / focalLength));
+    const fNumber = focalLength / lensDiameter;
+    const apertureThroughput = 1 - Math.exp(-2 * Math.pow(radius / waist, 2));
+    const cutoffHz = (C0 * mode.root) / (TWO_PI * radius);
+    const k0 = TWO_PI * frequencyHz / C0;
+    const kc = mode.root / radius;
+    const propagating = frequencyHz > cutoffHz;
+    const beta = propagating ? Math.sqrt(k0 * k0 - kc * kc) : Number.NaN;
+
+    const normalizedOverlap = overlapEfficiency(parameters.mode, radius, waist);
+    const coupling = propagating
+      ? Math.min(1, Math.max(0, apertureThroughput * normalizedOverlap))
+      : 0;
+
+    let alpha = Number.NaN;
+    let lossDbPerM = Number.NaN;
+    let totalLossDb = Number.NaN;
+    let outputPower = 0;
+    let relativeGroupDelayPs = Number.NaN;
+
+    if (propagating) {
+      const loss = conductorLoss(parameters.mode, frequencyHz, radius, beta);
+      alpha = loss.alpha;
+      lossDbPerM = loss.dbPerM;
+      totalLossDb = lossDbPerM * length;
+      outputPower = coupling * Math.exp(-2 * alpha * length);
+      const groupVelocity = C0 * Math.sqrt(1 - Math.pow(cutoffHz / frequencyHz, 2));
+      relativeGroupDelayPs = length * (1 / groupVelocity - 1 / C0) * 1e12;
+    }
+
+    return {
+      mode,
+      frequencyHz,
+      radius,
+      length,
+      wavelength,
+      waist,
+      numericalAperture,
+      fNumber,
+      apertureThroughput,
+      cutoffHz,
+      k0,
+      kc,
+      propagating,
+      beta,
+      normalizedOverlap,
+      coupling,
+      alpha,
+      lossDbPerM,
+      totalLossDb,
+      outputPower,
+      relativeGroupDelayPs,
+    };
+  }
+
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function formatModeHtml(modeKey) {
+    const mode = MODES[modeKey];
+    return `${mode.family}<sub>${mode.m}${mode.n}</sub>`;
+  }
+
+  function setText(id, value) {
+    element[id].textContent = value;
+  }
+
+  function formatFinite(value, digits) {
+    return Number.isFinite(value) ? value.toFixed(digits) : "—";
+  }
+
+  function updateResults(result, elapsedMs) {
+    element.modeLabel.innerHTML = formatModeHtml(state.mode);
+    setText("frequencyLabel", `${state.frequencyTHz.toFixed(2)} THz`);
+    setText("cutoffValue", (result.cutoffHz / 1e9).toFixed(2));
+    element.cutoffFormula.innerHTML = `f<sub>c</sub>(${formatModeHtml(state.mode)})`;
+    setText("waistValue", (result.waist * 1e3).toFixed(3));
+    setText("naValue", result.numericalAperture.toFixed(3));
+    setText("fNumberValue", `f/${result.fNumber.toFixed(2)}`);
+    setText("couplingValue", result.propagating ? (result.coupling * 100).toFixed(1) : "—");
+    setText(
+      "transmissionValue",
+      result.propagating ? (result.outputPower * 100).toFixed(1) : "—",
+    );
+    setText("lossValue", formatFinite(result.totalLossDb, 2));
+    setText(
+      "lossPerMeterValue",
+      Number.isFinite(result.lossDbPerM)
+        ? `${result.lossDbPerM.toFixed(2)} dB m⁻¹`
+        : "— dB m⁻¹",
+    );
+    setText("delayValue", formatFinite(result.relativeGroupDelayPs, 2));
+    setText("rootValue", result.mode.root.toFixed(5));
+    setText(
+      "betaValue",
+      result.propagating ? `${(result.beta / 1e3).toFixed(2)} mm⁻¹` : "imaginary",
+    );
+    setText("apertureValue", `${(result.apertureThroughput * 100).toFixed(1)}%`);
+    setText("solverTime", `${elapsedMs.toFixed(1)} ms`);
+
+    element.fieldStatus.textContent = result.propagating ? "Propagating" : "Evanescent";
+    element.fieldStatus.classList.toggle("evanescent", !result.propagating);
+    element.statusCard.classList.toggle("evanescent", !result.propagating);
+    setText("propagationStatus", result.propagating ? "Propagating" : "Below cutoff");
+    setText(
+      "propagationDetail",
+      result.propagating
+        ? "β is real above cutoff"
+        : `Raise f above ${(result.cutoffHz / 1e12).toFixed(3)} THz`,
+    );
+  }
+
+  function resizeCanvas(canvas) {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const width = Math.max(1, Math.round(rect.width * dpr));
+    const height = Math.max(1, Math.round(rect.height * dpr));
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+    }
+    const context = canvas.getContext("2d");
+    context.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { context, width: rect.width, height: rect.height, dpr };
+  }
+
+  function hexToRgb(hex) {
+    const value = Number.parseInt(hex.slice(1), 16);
+    return {
+      r: (value >> 16) & 255,
+      g: (value >> 8) & 255,
+      b: value & 255,
+    };
+  }
+
+  function interpolateColor(first, second, t) {
+    const a = hexToRgb(first);
+    const b = hexToRgb(second);
+    const mix = (left, right) => Math.round(left + (right - left) * t);
+    return `rgb(${mix(a.r, b.r)}, ${mix(a.g, b.g)}, ${mix(a.b, b.b)})`;
+  }
+
+  function fieldColor(value, dimmed) {
+    const stops = [
+      [-1, "#071e57"],
+      [-0.48, "#1454ba"],
+      [0, "#07131f"],
+      [0.48, "#1dd6da"],
+      [0.76, "#f6b73c"],
+      [1, "#ff7043"],
+    ];
+    const v = clamp(value, -1, 1);
+    let color = stops[stops.length - 1][1];
+    for (let i = 0; i < stops.length - 1; i += 1) {
+      const [leftValue, leftColor] = stops[i];
+      const [rightValue, rightColor] = stops[i + 1];
+      if (v >= leftValue && v <= rightValue) {
+        color = interpolateColor(
+          leftColor,
+          rightColor,
+          (v - leftValue) / (rightValue - leftValue),
+        );
+        break;
+      }
+    }
+    if (!dimmed) return color;
+    const rgb = color.match(/\d+/g).map(Number);
+    return `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.38)`;
+  }
+
+  function drawArrow(context, x, y, dx, dy, scale, alpha) {
+    const magnitude = Math.hypot(dx, dy);
+    if (magnitude < 1e-6) return;
+    const ux = dx / magnitude;
+    const uy = -dy / magnitude;
+    const length = scale * (0.32 + 0.68 * magnitude);
+    const half = length * 0.5;
+    const startX = x - ux * half;
+    const startY = y - uy * half;
+    const endX = x + ux * half;
+    const endY = y + uy * half;
+    const head = Math.max(3, length * 0.22);
+
+    context.beginPath();
+    context.moveTo(startX, startY);
+    context.lineTo(endX, endY);
+    context.moveTo(endX, endY);
+    context.lineTo(endX - ux * head + uy * head * 0.55, endY - uy * head - ux * head * 0.55);
+    context.moveTo(endX, endY);
+    context.lineTo(endX - ux * head - uy * head * 0.55, endY - uy * head + ux * head * 0.55);
+    context.strokeStyle = `rgba(225, 250, 255, ${alpha})`;
+    context.lineWidth = 0.9;
+    context.stroke();
+  }
+
+  function drawField(result) {
+    const { context, width, height } = resizeCanvas(element.fieldCanvas);
+    const cache = getSpatialCache(state.mode);
+    const mode = MODES[state.mode];
+    const padding = 18;
+    const diameter = Math.max(80, Math.min(width, height) - padding * 2);
+    const left = (width - diameter) * 0.5;
+    const top = (height - diameter) * 0.5;
+    const cell = diameter / cache.resolution;
+    const betaScale =
+      mode.family === "TM" && result.propagating
+        ? result.beta / result.kc
+        : 1;
+
+    context.clearRect(0, 0, width, height);
+    context.fillStyle = "#050c14";
+    context.fillRect(0, 0, width, height);
+
+    let maxField = 0;
+    for (const point of cache.points) {
+      maxField = Math.max(maxField, Math.abs(point.baseEx * betaScale));
+    }
+    maxField = maxField || 1;
+
+    for (const point of cache.points) {
+      const value = (point.baseEx * betaScale) / maxField;
+      context.fillStyle = fieldColor(value, !result.propagating);
+      context.fillRect(
+        left + point.col * cell,
+        top + point.row * cell,
+        cell + 0.75,
+        cell + 0.75,
+      );
+    }
+
+    context.save();
+    context.beginPath();
+    context.arc(width * 0.5, height * 0.5, diameter * 0.5, 0, TWO_PI);
+    context.clip();
+    context.setLineDash([5, 6]);
+    context.strokeStyle = "rgba(160, 192, 208, 0.35)";
+    context.lineWidth = 1;
+    context.beginPath();
+    context.moveTo(left, height * 0.5);
+    context.lineTo(left + diameter, height * 0.5);
+    context.moveTo(width * 0.5, top);
+    context.lineTo(width * 0.5, top + diameter);
+    context.stroke();
+    context.setLineDash([]);
+
+    const arrowStep = 15;
+    for (let row = 7; row < cache.resolution; row += arrowStep) {
+      for (let col = 7; col < cache.resolution; col += arrowStep) {
+        const xUnit = -1 + col * cache.step;
+        const yUnit = 1 - row * cache.step;
+        const sample = scalarAndGradient(xUnit, yUnit, mode);
+        if (!sample) continue;
+        let ex = mode.family === "TE" ? -sample.gy : -sample.gx;
+        let ey = mode.family === "TE" ? sample.gx : -sample.gy;
+        ex *= betaScale;
+        ey *= betaScale;
+        const normalizedMagnitude = clamp(Math.hypot(ex, ey) / maxField, 0, 1);
+        drawArrow(
+          context,
+          left + col * cell,
+          top + row * cell,
+          ex / maxField,
+          ey / maxField,
+          cell * arrowStep * 0.72,
+          result.propagating ? 0.25 + 0.65 * normalizedMagnitude : 0.18,
+        );
+      }
+    }
+    context.restore();
+
+    context.beginPath();
+    context.arc(width * 0.5, height * 0.5, diameter * 0.5 + 1, 0, TWO_PI);
+    context.strokeStyle = result.propagating ? "#f5a524" : "#ff5577";
+    context.lineWidth = 2;
+    context.shadowColor = result.propagating
+      ? "rgba(245, 165, 36, 0.48)"
+      : "rgba(255, 85, 119, 0.42)";
+    context.shadowBlur = 9;
+    context.stroke();
+    context.shadowBlur = 0;
+  }
+
+  function frequencySweep() {
+    const points = [];
+    const count = 121;
+    for (let i = 0; i < count; i += 1) {
+      const frequencyTHz = 0.1 + (1.9 * i) / (count - 1);
+      const result = solve({ ...state, frequencyTHz });
+      points.push({
+        frequencyTHz,
+        outputPercent: result.outputPower * 100,
+        lossDb: result.totalLossDb,
+        propagating: result.propagating,
+      });
+    }
+    return points;
+  }
+
+  function drawSpectrum(currentResult) {
+    const { context, width, height } = resizeCanvas(element.spectrumCanvas);
+    const margin = { left: 44, right: 42, top: 13, bottom: 26 };
+    const plot = {
+      left: margin.left,
+      top: margin.top,
+      width: Math.max(10, width - margin.left - margin.right),
+      height: Math.max(10, height - margin.top - margin.bottom),
+    };
+    const points = frequencySweep();
+    const finiteLosses = points.filter((point) => Number.isFinite(point.lossDb)).map((point) => point.lossDb);
+    const rawLossMax = Math.max(1, ...finiteLosses);
+    const lossMax = Math.ceil(rawLossMax / 2) * 2;
+    const xForFrequency = (frequencyTHz) =>
+      plot.left + ((frequencyTHz - 0.1) / 1.9) * plot.width;
+    const yForOutput = (value) => plot.top + plot.height * (1 - clamp(value, 0, 100) / 100);
+    const yForLoss = (value) => plot.top + plot.height * (clamp(value, 0, lossMax) / lossMax);
+
+    context.clearRect(0, 0, width, height);
+    context.fillStyle = "#07111c";
+    context.fillRect(0, 0, width, height);
+    context.font = '9px "SFMono-Regular", Consolas, monospace';
+    context.textBaseline = "middle";
+
+    for (let i = 0; i <= 4; i += 1) {
+      const y = plot.top + (plot.height * i) / 4;
+      context.beginPath();
+      context.moveTo(plot.left, y);
+      context.lineTo(plot.left + plot.width, y);
+      context.strokeStyle = "rgba(74, 113, 139, 0.23)";
+      context.lineWidth = 1;
+      context.stroke();
+      context.fillStyle = "#6f879a";
+      context.textAlign = "right";
+      context.fillText(`${100 - i * 25}`, plot.left - 6, y);
+      context.textAlign = "left";
+      context.fillText(`${((lossMax * i) / 4).toFixed(1)}`, plot.left + plot.width + 6, y);
+    }
+
+    for (let i = 0; i <= 4; i += 1) {
+      const frequency = 0.1 + (1.9 * i) / 4;
+      const x = xForFrequency(frequency);
+      context.beginPath();
+      context.moveTo(x, plot.top);
+      context.lineTo(x, plot.top + plot.height);
+      context.strokeStyle = "rgba(74, 113, 139, 0.16)";
+      context.stroke();
+      context.fillStyle = "#6f879a";
+      context.textAlign = "center";
+      context.fillText(frequency.toFixed(2), x, plot.top + plot.height + 13);
+    }
+
+    context.save();
+    context.beginPath();
+    context.rect(plot.left, plot.top, plot.width, plot.height);
+    context.clip();
+
+    const cutoffTHz = currentResult.cutoffHz / 1e12;
+    if (cutoffTHz >= 0.1 && cutoffTHz <= 2) {
+      const cutoffX = xForFrequency(cutoffTHz);
+      context.beginPath();
+      context.moveTo(cutoffX, plot.top);
+      context.lineTo(cutoffX, plot.top + plot.height);
+      context.setLineDash([4, 4]);
+      context.strokeStyle = "rgba(184, 204, 215, 0.72)";
+      context.lineWidth = 1;
+      context.stroke();
+      context.setLineDash([]);
+    }
+
+    context.beginPath();
+    let outputStarted = false;
+    for (const point of points) {
+      if (!point.propagating) continue;
+      const x = xForFrequency(point.frequencyTHz);
+      const y = yForOutput(point.outputPercent);
+      if (!outputStarted) {
+        context.moveTo(x, y);
+        outputStarted = true;
+      } else {
+        context.lineTo(x, y);
+      }
+    }
+    context.strokeStyle = "#32d7e7";
+    context.lineWidth = 2;
+    context.shadowColor = "rgba(50, 215, 231, 0.35)";
+    context.shadowBlur = 7;
+    context.stroke();
+    context.shadowBlur = 0;
+
+    context.beginPath();
+    let lossStarted = false;
+    for (const point of points) {
+      if (!Number.isFinite(point.lossDb)) continue;
+      const x = xForFrequency(point.frequencyTHz);
+      const y = yForLoss(point.lossDb);
+      if (!lossStarted) {
+        context.moveTo(x, y);
+        lossStarted = true;
+      } else {
+        context.lineTo(x, y);
+      }
+    }
+    context.strokeStyle = "#f5a524";
+    context.lineWidth = 1.8;
+    context.stroke();
+
+    const currentX = xForFrequency(state.frequencyTHz);
+    context.beginPath();
+    context.moveTo(currentX, plot.top);
+    context.lineTo(currentX, plot.top + plot.height);
+    context.strokeStyle = "rgba(50, 215, 231, 0.55)";
+    context.lineWidth = 1;
+    context.stroke();
+    if (currentResult.propagating) {
+      context.beginPath();
+      context.arc(currentX, yForOutput(currentResult.outputPower * 100), 3.5, 0, TWO_PI);
+      context.fillStyle = "#e8fdff";
+      context.fill();
+      context.strokeStyle = "#32d7e7";
+      context.lineWidth = 2;
+      context.stroke();
+    }
+    context.restore();
+
+    context.fillStyle = "#8aa0b4";
+    context.textAlign = "left";
+    context.fillText("output %", plot.left, 5);
+    context.textAlign = "right";
+    context.fillText("loss dB", plot.left + plot.width, 5);
+    context.textAlign = "center";
+    context.fillText("frequency (THz)", plot.left + plot.width * 0.5, height - 5);
+
+    chartState = { points, plot, xForFrequency, lossMax };
+  }
+
+  function updateRangeFill(input) {
+    const min = Number(input.min);
+    const max = Number(input.max);
+    const fraction = (Number(input.value) - min) / (max - min);
+    input.style.setProperty("--fill", `${clamp(fraction, 0, 1) * 100}%`);
+  }
+
+  function syncControlsFromState() {
+    for (const config of Object.values(CONTROL_MAP)) {
+      const range = element[config.range];
+      const number = element[config.number];
+      range.value = state[config.key];
+      number.value = state[config.key];
+      updateRangeFill(range);
+    }
+    for (const button of element.modeButtons.querySelectorAll(".mode-button")) {
+      button.classList.toggle("active", button.dataset.mode === state.mode);
+    }
+  }
+
+  function scheduleRender() {
+    if (renderQueued) return;
+    renderQueued = true;
+    requestAnimationFrame(() => {
+      renderQueued = false;
+      render();
+    });
+  }
+
+  function render() {
+    const started = performance.now();
+    const result = solve();
+    drawField(result);
+    drawSpectrum(result);
+    updateResults(result, performance.now() - started);
+  }
+
+  function setFrequencyFromChart(clientX) {
+    if (!chartState) return;
+    const rect = element.spectrumCanvas.getBoundingClientRect();
+    const localX = clientX - rect.left;
+    const fraction = clamp(
+      (localX - chartState.plot.left) / chartState.plot.width,
+      0,
+      1,
+    );
+    state.frequencyTHz = Math.round((0.1 + 1.9 * fraction) * 100) / 100;
+    element.frequencyRange.value = state.frequencyTHz;
+    element.frequencyNumber.value = state.frequencyTHz.toFixed(2);
+    updateRangeFill(element.frequencyRange);
+    scheduleRender();
+  }
+
+  function updateChartTooltip(event) {
+    if (!chartState || chartDragging) {
+      element.chartTooltip.hidden = true;
+      return;
+    }
+    const rect = element.spectrumCanvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    const { plot, points } = chartState;
+    if (
+      x < plot.left ||
+      x > plot.left + plot.width ||
+      y < plot.top ||
+      y > plot.top + plot.height
+    ) {
+      element.chartTooltip.hidden = true;
+      return;
+    }
+    const frequency = 0.1 + 1.9 * ((x - plot.left) / plot.width);
+    const index = clamp(
+      Math.round(((frequency - 0.1) / 1.9) * (points.length - 1)),
+      0,
+      points.length - 1,
+    );
+    const point = points[index];
+    element.chartTooltip.innerHTML = point.propagating
+      ? `<b>${point.frequencyTHz.toFixed(3)} THz</b><br>Output ${point.outputPercent.toFixed(2)}%<br>Loss ${point.lossDb.toFixed(3)} dB`
+      : `<b>${point.frequencyTHz.toFixed(3)} THz</b><br>Below cutoff`;
+    element.chartTooltip.hidden = false;
+    const tooltipLeft = clamp(x + 12, 6, rect.width - 126);
+    const tooltipTop = clamp(y - 24, 4, rect.height - 54);
+    element.chartTooltip.style.left = `${tooltipLeft}px`;
+    element.chartTooltip.style.top = `${tooltipTop}px`;
+  }
+
+  function csvValue(value, digits = 8) {
+    return Number.isFinite(value) ? value.toFixed(digits) : "";
+  }
+
+  function exportCsv() {
+    const rows = [
+      [
+        "frequency_thz",
+        "mode",
+        "cutoff_thz",
+        "waist_mm",
+        "aperture_throughput",
+        "modal_coupling",
+        "loss_db_per_m",
+        "total_loss_db",
+        "output_power_fraction",
+        "relative_group_delay_ps",
+      ],
+    ];
+
+    for (let i = 0; i <= 190; i += 1) {
+      const frequencyTHz = 0.1 + i * 0.01;
+      const result = solve({ ...state, frequencyTHz });
+      rows.push([
+        frequencyTHz.toFixed(2),
+        state.mode,
+        (result.cutoffHz / 1e12).toFixed(8),
+        (result.waist * 1e3).toFixed(8),
+        result.apertureThroughput.toFixed(8),
+        result.coupling.toFixed(8),
+        csvValue(result.lossDbPerM),
+        csvValue(result.totalLossDb),
+        result.outputPower.toFixed(8),
+        csvValue(result.relativeGroupDelayPs),
+      ]);
+    }
+
+    const blob = new Blob([rows.map((row) => row.join(",")).join("\n")], {
+      type: "text/csv;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `thz-waveguide-${state.mode.toLowerCase()}-spectrum.csv`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function bindControls() {
+    for (const config of Object.values(CONTROL_MAP)) {
+      const range = element[config.range];
+      const number = element[config.number];
+      const min = Number(range.min);
+      const max = Number(range.max);
+
+      range.addEventListener("input", () => {
+        state[config.key] = Number(range.value);
+        number.value = range.value;
+        updateRangeFill(range);
+        scheduleRender();
+      });
+
+      const updateFromNumber = () => {
+        if (number.value === "") return;
+        const value = clamp(Number(number.value), min, max);
+        if (!Number.isFinite(value)) return;
+        state[config.key] = value;
+        range.value = value;
+        updateRangeFill(range);
+        scheduleRender();
+      };
+      number.addEventListener("input", updateFromNumber);
+      number.addEventListener("change", () => {
+        updateFromNumber();
+        number.value = state[config.key];
+      });
+    }
+
+    element.modeButtons.addEventListener("click", (event) => {
+      const button = event.target.closest(".mode-button");
+      if (!button) return;
+      state.mode = button.dataset.mode;
+      syncControlsFromState();
+      scheduleRender();
+    });
+
+    element.resetButton.addEventListener("click", () => {
+      Object.assign(state, DEFAULTS);
+      syncControlsFromState();
+      scheduleRender();
+    });
+    element.exportButton.addEventListener("click", exportCsv);
+
+    element.spectrumCanvas.addEventListener("pointerdown", (event) => {
+      chartDragging = true;
+      element.spectrumCanvas.setPointerCapture(event.pointerId);
+      element.chartTooltip.hidden = true;
+      setFrequencyFromChart(event.clientX);
+    });
+    element.spectrumCanvas.addEventListener("pointermove", (event) => {
+      if (chartDragging) setFrequencyFromChart(event.clientX);
+      else updateChartTooltip(event);
+    });
+    element.spectrumCanvas.addEventListener("pointerup", (event) => {
+      chartDragging = false;
+      if (element.spectrumCanvas.hasPointerCapture(event.pointerId)) {
+        element.spectrumCanvas.releasePointerCapture(event.pointerId);
+      }
+    });
+    element.spectrumCanvas.addEventListener("pointercancel", () => {
+      chartDragging = false;
+    });
+    element.spectrumCanvas.addEventListener("pointerleave", () => {
+      if (!chartDragging) element.chartTooltip.hidden = true;
+    });
+
+    const resizeObserver = new ResizeObserver(scheduleRender);
+    resizeObserver.observe(element.fieldCanvas);
+    resizeObserver.observe(element.spectrumCanvas);
+  }
+
+  function initialize() {
+    const ids = [
+      "frequencyRange",
+      "frequencyNumber",
+      "diameterRange",
+      "diameterNumber",
+      "lengthRange",
+      "lengthNumber",
+      "focalRange",
+      "focalNumber",
+      "lensDiameterRange",
+      "lensDiameterNumber",
+      "fillRange",
+      "fillNumber",
+      "modeButtons",
+      "resetButton",
+      "exportButton",
+      "fieldCanvas",
+      "spectrumCanvas",
+      "chartTooltip",
+      "modeLabel",
+      "frequencyLabel",
+      "fieldStatus",
+      "cutoffValue",
+      "cutoffFormula",
+      "waistValue",
+      "naValue",
+      "fNumberValue",
+      "couplingValue",
+      "transmissionValue",
+      "lossValue",
+      "lossPerMeterValue",
+      "delayValue",
+      "statusCard",
+      "propagationStatus",
+      "propagationDetail",
+      "rootValue",
+      "betaValue",
+      "apertureValue",
+      "solverTime",
+    ];
+    for (const id of ids) element[id] = document.getElementById(id);
+    syncControlsFromState();
+    bindControls();
+    scheduleRender();
+  }
+
+  initialize();
+})();
+
+    </script>
   </body>
 </html>
