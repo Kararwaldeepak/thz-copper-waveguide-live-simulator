@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Interactive browser-only simulation of Gaussian THz coupling to circular copper waveguide modes."
+    />
+    <meta name="theme-color" content="#050a12" />
+    <title>THz Circular Waveguide Live Simulator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#simulator" aria-label="THz waveguide simulator home">
+        <span class="brand-mark" aria-hidden="true">
+          <span></span>
+        </span>
+        <span>THz Circular Waveguide <strong>Live Simulator</strong></span>
+      </a>
+      <div class="topbar-actions">
+        <span class="live-indicator"><i></i> Live</span>
+        <button class="icon-button" id="resetButton" type="button" title="Reset all parameters">
+          <span aria-hidden="true">↻</span> Reset
+        </button>
+        <button class="icon-button" id="exportButton" type="button" title="Export the current spectrum as CSV">
+          <span aria-hidden="true">⇩</span> Export CSV
+        </button>
+      </div>
+    </header>
+
+    <main id="simulator">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Electromagnetic mode laboratory</p>
+          <h1>THz Circular Waveguide Live Simulator</h1>
+          <p>
+            Explore Gaussian-beam coupling, cutoff, dispersion and copper-wall loss
+            in an air-filled circular waveguide—directly in your browser.
+          </p>
+        </div>
+        <div class="hero-spec" aria-label="Default experiment">
+          <span>Copper</span>
+          <b>2.0 mm ID</b>
+          <b>40 cm</b>
+          <b>f = 100 mm</b>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="Interactive waveguide simulator">
+        <aside class="panel controls-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="section-number">01</span>
+              <h2>Parameters</h2>
+            </div>
+            <span class="material-pill">Cu · air core</span>
+          </div>
+
+          <fieldset class="mode-fieldset">
+            <legend>Mode family</legend>
+            <div class="mode-grid" id="modeButtons">
+              <button type="button" class="mode-button active" data-mode="TE11">TE<sub>11</sub></button>
+              <button type="button" class="mode-button" data-mode="TM01">TM<sub>01</sub></button>
+              <button type="button" class="mode-button" data-mode="TE21">TE<sub>21</sub></button>
+              <button type="button" class="mode-button" data-mode="TE01">TE<sub>01</sub></button>
+              <button type="button" class="mode-button" data-mode="TM11">TM<sub>11</sub></button>
+              <button type="button" class="mode-button" data-mode="TE12">TE<sub>12</sub></button>
+            </div>
+          </fieldset>
+
+          <div class="control-list">
+            <div class="control" data-control="frequency">
+              <div class="control-label">
+                <label for="frequencyRange">Frequency</label>
+                <span class="number-wrap">
+                  <input id="frequencyNumber" type="number" min="0.10" max="2.00" step="0.01" value="1.00" />
+                  <span>THz</span>
+                </span>
+              </div>
+              <input id="frequencyRange" type="range" min="0.10" max="2.00" step="0.01" value="1.00" />
+              <div class="range-ends"><span>0.10</span><span>2.00 THz</span></div>
+            </div>
+
+            <div class="control" data-control="diameter">
+              <div class="control-label">
+                <label for="diameterRange">Waveguide inner diameter</label>
+                <span class="number-wrap">
+                  <input id="diameterNumber" type="number" min="0.5" max="5.0" step="0.1" value="2.0" />
+                  <span>mm</span>
+                </span>
+              </div>
+              <input id="diameterRange" type="range" min="0.5" max="5.0" step="0.1" value="2.0" />
+              <div class="range-ends"><span>0.5</span><span>5.0 mm</span></div>
+            </div>
+
+            <div class="control" data-control="length">
+              <div class="control-label">
+                <label for="lengthRange">Copper tube length</label>
+                <span class="number-wrap">
+                  <input id="lengthNumber" type="number" min="1" max="200" step="1" value="40" />
+                  <span>cm</span>
+                </span>
+              </div>
+              <input id="lengthRange" type="range" min="1" max="200" step="1" value="40" />
+              <div class="range-ends"><span>1</span><span>200 cm</span></div>
+            </div>
+
+            <div class="control" data-control="focal">
+              <div class="control-label">
+                <label for="focalRange">Lens focal length</label>
+                <span class="number-wrap">
+                  <input id="focalNumber" type="number" min="10" max="500" step="5" value="100" />
+                  <span>mm</span>
+                </span>
+              </div>
+              <input id="focalRange" type="range" min="10" max="500" step="5" value="100" />
+              <div class="range-ends"><span>10</span><span>500 mm</span></div>
+            </div>
+
+            <div class="control" data-control="lensDiameter">
+              <div class="control-label">
+                <label for="lensDiameterRange">Lens clear diameter</label>
+                <span class="number-wrap">
+                  <input id="lensDiameterNumber" type="number" min="10" max="100" step="0.1" value="50.8" />
+                  <span>mm</span>
+                </span>
+              </div>
+              <input id="lensDiameterRange" type="range" min="10" max="100" step="0.1" value="50.8" />
+              <div class="range-ends"><span>10</span><span>100 mm</span></div>
+            </div>
+
+            <div class="control compact-control" data-control="fill">
+              <div class="control-label">
+                <label for="fillRange">Gaussian lens fill</label>
+                <span class="number-wrap">
+                  <input id="fillNumber" type="number" min="0.20" max="1.00" step="0.01" value="1.00" />
+                  <span>× radius</span>
+                </span>
+              </div>
+              <input id="fillRange" type="range" min="0.20" max="1.00" step="0.01" value="1.00" />
+              <div class="range-ends"><span>underfill</span><span>full</span></div>
+            </div>
+          </div>
+
+          <div class="assumption">
+            <span>Model assumption</span>
+            <p>The Gaussian 1/e field radius equals the selected fraction of the lens radius.</p>
+          </div>
+        </aside>
+
+        <div class="visual-column">
+          <section class="panel field-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="section-number">02</span>
+                <h2>Transverse electric field</h2>
+              </div>
+              <div class="field-meta">
+                <span id="modeLabel">TE<sub>11</sub></span>
+                <span id="frequencyLabel">1.00 THz</span>
+              </div>
+            </div>
+            <div class="canvas-wrap field-canvas-wrap">
+              <canvas id="fieldCanvas" role="img" aria-label="Normalized transverse electric-field map"></canvas>
+              <div class="axis-label x-axis">x</div>
+              <div class="axis-label y-axis">y</div>
+              <div class="colorbar" aria-hidden="true">
+                <span>+1</span><i></i><span>0</span><i></i><span>−1</span>
+              </div>
+              <div id="fieldStatus" class="field-status">Propagating</div>
+            </div>
+            <div class="field-caption">
+              <span><i class="legend-swatch heat"></i> normalized E<sub>x</sub></span>
+              <span><i class="legend-arrow">→</i> transverse E direction</span>
+              <span>copper boundary shown in amber</span>
+            </div>
+          </section>
+
+          <section class="panel spectrum-panel">
+            <div class="panel-heading compact">
+              <div>
+                <span class="section-number">03</span>
+                <h2>Spectral response</h2>
+              </div>
+              <span class="chart-note">Drag or click the chart to set frequency</span>
+            </div>
+            <div class="canvas-wrap chart-wrap">
+              <canvas id="spectrumCanvas" role="img" aria-label="Frequency-dependent coupled transmission and copper loss"></canvas>
+              <div id="chartTooltip" class="chart-tooltip" hidden></div>
+            </div>
+            <div class="chart-legend">
+              <span><i class="line cyan"></i> output power</span>
+              <span><i class="line amber"></i> copper loss</span>
+              <span><i class="line dashed"></i> cutoff</span>
+            </div>
+          </section>
+        </div>
+
+        <aside class="panel results-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="section-number">04</span>
+              <h2>Live results</h2>
+            </div>
+            <span id="solverTime" class="solver-time">browser solver</span>
+          </div>
+
+          <div class="metric primary">
+            <div class="metric-copy">
+              <span>Cutoff frequency</span>
+              <strong><b id="cutoffValue">87.85</b> <small>GHz</small></strong>
+              <em id="cutoffFormula">f<sub>c</sub>(TE<sub>11</sub>)</em>
+            </div>
+            <div class="mini-cutoff" aria-hidden="true">
+              <i></i><span>f<sub>c</sub></span>
+            </div>
+          </div>
+
+          <div class="metric-grid">
+            <div class="metric">
+              <span>Gaussian waist</span>
+              <strong><b id="waistValue">0.376</b> <small>mm</small></strong>
+              <em>w<sub>0</sub></em>
+            </div>
+            <div class="metric">
+              <span>Lens NA / f-number</span>
+              <strong><b id="naValue">0.246</b></strong>
+              <em id="fNumberValue">f/1.97</em>
+            </div>
+            <div class="metric">
+              <span>Modal coupling</span>
+              <strong><b id="couplingValue">—</b> <small>%</small></strong>
+              <em>Gaussian → mode</em>
+            </div>
+            <div class="metric">
+              <span>Output power</span>
+              <strong><b id="transmissionValue">—</b> <small>%</small></strong>
+              <em>after copper tube</em>
+            </div>
+            <div class="metric amber-metric">
+              <span>Copper-wall loss</span>
+              <strong><b id="lossValue">—</b> <small>dB</small></strong>
+              <em id="lossPerMeterValue">— dB m⁻¹</em>
+            </div>
+            <div class="metric">
+              <span>Relative group delay</span>
+              <strong><b id="delayValue">—</b> <small>ps</small></strong>
+              <em>vs. free space</em>
+            </div>
+          </div>
+
+          <div class="status-card" id="statusCard">
+            <span class="status-dot"></span>
+            <div>
+              <b id="propagationStatus">Propagating</b>
+              <small id="propagationDetail">β is real above cutoff</small>
+            </div>
+          </div>
+
+          <div class="mode-facts">
+            <div><span>Bessel root</span><b id="rootValue">1.84118</b></div>
+            <div><span>Propagation constant β</span><b id="betaValue">20.88 mm⁻¹</b></div>
+            <div><span>Aperture throughput</span><b id="apertureValue">100.0%</b></div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="method-strip">
+        <div>
+          <span class="section-number">05</span>
+          <h2>Model used in the browser</h2>
+        </div>
+        <div class="equation"><i>f</i><sub>c</sub> = cχ / 2πa</div>
+        <div class="equation">β = √(k<sub>0</sub>² − k<sub>c</sub>²)</div>
+        <div class="equation"><i>w</i><sub>0</sub> = λf / πw<sub>L</sub></div>
+        <div class="equation">R<sub>s</sub> = √(πfμ<sub>0</sub>/σ)</div>
+        <p>
+          Perfect-conductor circular eigenfields with first-order copper surface-resistance loss.
+          Centered Gaussian overlap is evaluated numerically. Flanges, roughness, offsets and lens
+          aberrations are not included.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <span>Browser-only · no Python · no uploaded data</span>
+      <span>© 2026 Deepak Kararwal · MIT License</span>
+    </footer>
+
+    <noscript>
+      <div class="noscript">JavaScript is required for the live electromagnetic simulation.</div>
+    </noscript>
+    <script src="app.js"></script>
+  </body>
+</html>
