@@ -26,7 +26,7 @@
   --muted: #8aa0b4;
   --muted-2: #5f7589;
   --danger: #ff5577;
-  --radius: 22px;
+  --radius: 12px;
   --shadow: 0 24px 70px rgba(0, 0, 0, 0.26);
 }
 
@@ -90,7 +90,7 @@ button {
   align-items: center;
   gap: 12px;
   color: var(--text);
-  font-size: 24px;
+  font-size: 14px;
   font-weight: 520;
   letter-spacing: 0.01em;
   text-decoration: none;
@@ -185,7 +185,7 @@ button {
 
 .icon-button span {
   color: var(--cyan);
-  font-size: 27px;
+  font-size: 17px;
   line-height: 1;
 }
 
@@ -1330,6 +1330,190 @@ footer {
   }
 }
 
+/* Larger, presentation-friendly typography */
+body {
+  font-size: 17px;
+}
+
+.brand { font-size: 17px; }
+.live-indicator { font-size: 14px; }
+.icon-button { min-height: 42px; font-size: 13px; }
+.eyebrow { font-size: 13px; }
+.hero h1 { font-size: clamp(34px, 3vw, 54px); }
+.hero p:not(.eyebrow) { font-size: clamp(16px, 1.25vw, 20px); }
+.hero-spec { font-size: 13px; }
+.hero-spec span { font-size: 15px; }
+.panel h2,
+.method-strip h2 { font-size: 17px; }
+.section-number { font-size: 12px; }
+.material-pill,
+.solver-time { font-size: 11px; }
+.mode-fieldset legend { font-size: 14px; }
+.mode-button { min-height: 42px; font-size: 16px; }
+.mode-button sub { font-size: 11px; }
+.control label { font-size: 15px; }
+.number-wrap input { font-size: 17px; }
+.number-wrap span { font-size: 12px; }
+.range-ends { font-size: 11px; }
+.assumption span { font-size: 11px; }
+.assumption p { font-size: 13px; }
+.field-meta span { font-size: 12px; }
+.axis-label { font-size: 16px; }
+.colorbar,
+.field-status,
+.field-caption,
+.chart-note,
+.chart-legend,
+.chart-tooltip { font-size: 11px; }
+.metric-copy > span { font-size: 12px; }
+.metric-copy strong { font-size: clamp(27px, 2.1vw, 38px); }
+.metric-copy strong small,
+.metric-copy em { font-size: 12px; }
+.metric-grid .metric > span { font-size: 12px; }
+.metric-grid .metric strong { font-size: 22px; }
+.metric-grid .metric strong small,
+.metric-grid .metric em { font-size: 11px; }
+.status-card b { font-size: 15px; }
+.status-card small { font-size: 12px; }
+.mode-facts div,
+.mode-facts b { font-size: 11px; }
+.equation { font-size: 15px; }
+.method-strip p { font-size: 12px; }
+.theory-heading > p { font-size: 15px; }
+.theory-card h3,
+.symbol-table-wrap h3 { font-size: 17px; }
+.theory-card p { font-size: 14px; }
+.theory-equation { font-size: 17px; }
+.theory-note { font-size: 13px; }
+.symbol-table span { font-size: 13px; }
+.symbol-table b { font-size: 15px; }
+footer { font-size: 12px; }
+
+.interference-panel {
+  margin: 12px 14px 0;
+  overflow: hidden;
+  border: 1px solid rgba(50, 215, 231, 0.38);
+  border-radius: 10px;
+  background: rgba(10, 33, 46, 0.62);
+}
+
+.interference-toggle {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 13px;
+  cursor: pointer;
+}
+
+.interference-toggle span {
+  display: grid;
+  gap: 4px;
+}
+
+.interference-toggle b {
+  color: var(--cyan);
+  font-size: 14px;
+  letter-spacing: 0.035em;
+}
+
+.interference-toggle small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.interference-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.interference-toggle i {
+  position: relative;
+  width: 46px;
+  height: 25px;
+  border: 1px solid var(--line-bright);
+  border-radius: 999px;
+  background: #172838;
+  transition: 160ms ease;
+}
+
+.interference-toggle i::after {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: #8ba1b3;
+  content: "";
+  transition: 160ms ease;
+}
+
+.interference-toggle input:checked + i {
+  border-color: var(--cyan);
+  background: rgba(50, 215, 231, 0.25);
+}
+
+.interference-toggle input:checked + i::after {
+  left: 24px;
+  background: var(--cyan);
+  box-shadow: 0 0 12px rgba(50, 215, 231, 0.55);
+}
+
+.interference-controls {
+  border-top: 1px solid rgba(49, 81, 107, 0.55);
+}
+
+.interference-controls.inactive {
+  display: none;
+}
+
+.mode-grid.inactive {
+  opacity: 0.42;
+}
+
+.interference-controls .control {
+  padding-inline: 13px;
+}
+
+.interference-results {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  margin: 12px 13px 13px;
+  overflow: hidden;
+  border: 1px solid rgba(50, 215, 231, 0.28);
+  border-radius: 8px;
+  background: var(--line);
+}
+
+.interference-results.hidden {
+  display: none;
+}
+
+.interference-results div {
+  display: grid;
+  gap: 5px;
+  padding: 11px;
+  background: #091725;
+}
+
+.interference-results span {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.interference-results b {
+  color: var(--cyan);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 13px;
+}
+
+@media (max-width: 480px) {
+  .interference-results { grid-template-columns: 1fr; }
+}
+
     </style>
   </head>
   <body>
@@ -1390,6 +1574,41 @@ footer {
               <button type="button" class="mode-button" data-mode="TE12">TE<sub>12</sub></button>
             </div>
           </fieldset>
+
+          <section class="interference-panel" aria-labelledby="interferenceTitle">
+            <label class="interference-toggle" for="interferenceToggle">
+              <span>
+                <b id="interferenceTitle">TE<sub>11</sub> + TM<sub>11</sub> interference</b>
+                <small>Coherent two-mode field at the tube output</small>
+              </span>
+              <input id="interferenceToggle" type="checkbox" checked />
+              <i aria-hidden="true"></i>
+            </label>
+            <div class="interference-controls" id="interferenceControls">
+              <div class="control" data-control="tmAmplitude">
+                <div class="control-label">
+                  <label for="tmAmplitudeRange">TM<sub>11</sub> amplitude factor</label>
+                  <span class="number-wrap">
+                    <input id="tmAmplitudeNumber" type="number" min="0" max="1" step="0.01" value="1.00" />
+                    <span>×</span>
+                  </span>
+                </div>
+                <input id="tmAmplitudeRange" type="range" min="0" max="1" step="0.01" value="1.00" />
+                <div class="range-ends"><span>TE only</span><span>full TM</span></div>
+              </div>
+              <div class="control" data-control="relativePhase">
+                <div class="control-label">
+                  <label for="relativePhaseRange">Input relative phase</label>
+                  <span class="number-wrap">
+                    <input id="relativePhaseNumber" type="number" min="-180" max="180" step="1" value="0" />
+                    <span>deg</span>
+                  </span>
+                </div>
+                <input id="relativePhaseRange" type="range" min="-180" max="180" step="1" value="0" />
+                <div class="range-ends"><span>−180°</span><span>+180°</span></div>
+              </div>
+            </div>
+          </section>
 
           <div class="control-list">
             <div class="control" data-control="frequency">
@@ -1585,6 +1804,13 @@ footer {
             <div><span>Propagation constant β</span><b id="betaValue">20.88 mm⁻¹</b></div>
             <div><span>Aperture throughput</span><b id="apertureValue">100.0%</b></div>
           </div>
+
+          <div class="interference-results" id="interferenceResults">
+            <div><span>TE<sub>11</sub> output</span><b id="tePowerValue">—</b></div>
+            <div><span>TM<sub>11</sub> output</span><b id="tmPowerValue">—</b></div>
+            <div><span>Output relative phase</span><b id="interferencePhaseValue">—</b></div>
+            <div><span>Beat length</span><b id="beatLengthValue">—</b></div>
+          </div>
         </aside>
       </section>
 
@@ -1696,6 +1922,18 @@ footer {
               circular aperture. Symmetry can make the overlap of a centered
               beam with some modes zero even when those modes are above cutoff.
             </p>
+            <div class="theory-equation">
+              E(r,φ,L) = A<sub>TE</sub>E<sub>TE11</sub>e<sup>iβ<sub>TE</sub>L</sup>
+              + A<sub>TM</sub>E<sub>TM11</sub>e<sup>i(β<sub>TM</sub>L+φ<sub>0</sub>)</sup>
+            </div>
+            <p>
+              In interference mode the two complex output fields are added
+              coherently. Their output phase is φ<sub>0</sub> +
+              (β<sub>TM11</sub> − β<sub>TE11</sub>)L, and the axial beat length is
+              L<sub>b</sub> = 2π/|β<sub>TE11</sub> − β<sub>TM11</sub>|.
+              Orthogonality makes total integrated modal power additive, while
+              the local field pattern depends strongly on relative phase.
+            </p>
           </article>
 
           <article class="theory-card">
@@ -1789,6 +2027,9 @@ footer {
     lensDiameterMM: 50.8,
     fill: 1,
     mode: "TE11",
+    interferenceEnabled: true,
+    tmAmplitude: 1,
+    relativePhaseDeg: 0,
   };
 
   const CONTROL_MAP = {
@@ -1802,6 +2043,16 @@ footer {
       number: "lensDiameterNumber",
     },
     fill: { key: "fill", range: "fillRange", number: "fillNumber" },
+    tmAmplitude: {
+      key: "tmAmplitude",
+      range: "tmAmplitudeRange",
+      number: "tmAmplitudeNumber",
+    },
+    relativePhase: {
+      key: "relativePhaseDeg",
+      range: "relativePhaseRange",
+      number: "relativePhaseNumber",
+    },
   };
 
   const state = { ...DEFAULTS };
@@ -1888,6 +2139,7 @@ footer {
     const step = 2 / (resolution - 1);
     const points = [];
     let gradientIntegral = 0;
+    let fieldIntegral = 0;
 
     for (let row = 0; row < resolution; row += 1) {
       const y = 1 - row * step;
@@ -1900,10 +2152,11 @@ footer {
         const baseEy = mode.family === "TE" ? sample.gx : -sample.gy;
         points.push({ row, col, x, y, ...sample, baseEx, baseEy });
         gradientIntegral += (sample.gx * sample.gx + sample.gy * sample.gy) * step * step;
+        fieldIntegral += (baseEx * baseEx + baseEy * baseEy) * step * step;
       }
     }
 
-    const cache = { resolution, step, points, gradientIntegral };
+    const cache = { resolution, step, points, gradientIntegral, fieldIntegral };
     spatialCaches.set(modeKey, cache);
     return cache;
   }
@@ -2049,6 +2302,60 @@ footer {
     };
   }
 
+  function wrapDegrees(value) {
+    return ((value + 180) % 360 + 360) % 360 - 180;
+  }
+
+  function solveInterference(parameters = state) {
+    const te = solve({ ...parameters, mode: "TE11" });
+    const tm = solve({ ...parameters, mode: "TM11" });
+    const tmWeight = clamp(parameters.tmAmplitude, 0, 1);
+    const tmPower = tmWeight * tmWeight * tm.outputPower;
+    const tePower = te.outputPower;
+    const outputPower = Math.min(1, tePower + tmPower);
+    const coupling = Math.min(1, te.coupling + tmWeight * tmWeight * tm.coupling);
+    const bothPropagating = te.propagating && (tmWeight === 0 || tm.propagating);
+    const deltaBeta = te.propagating && tm.propagating ? tm.beta - te.beta : Number.NaN;
+    const phaseRad = Number.isFinite(deltaBeta)
+      ? (parameters.relativePhaseDeg * Math.PI) / 180 + deltaBeta * te.length
+      : (parameters.relativePhaseDeg * Math.PI) / 180;
+    const outputPhaseDeg = wrapDegrees((phaseRad * 180) / Math.PI);
+    const beatLength = Number.isFinite(deltaBeta) && Math.abs(deltaBeta) > 1e-12
+      ? TWO_PI / Math.abs(deltaBeta)
+      : Number.POSITIVE_INFINITY;
+    const totalLossDb = coupling > 0 && outputPower > 0
+      ? -10 * Math.log10(outputPower / coupling)
+      : Number.NaN;
+    const relativeGroupDelayPs = outputPower > 0
+      ? (tePower * te.relativeGroupDelayPs + tmPower * tm.relativeGroupDelayPs) / outputPower
+      : Number.NaN;
+
+    return {
+      multimode: true,
+      te,
+      tm,
+      tmWeight,
+      tePower,
+      tmPower,
+      outputPower,
+      coupling,
+      propagating: bothPropagating,
+      deltaBeta,
+      phaseRad,
+      outputPhaseDeg,
+      beatLength,
+      totalLossDb,
+      lossDbPerM: Number.isFinite(totalLossDb) ? totalLossDb / te.length : Number.NaN,
+      relativeGroupDelayPs,
+      cutoffHz: Math.max(te.cutoffHz, tm.cutoffHz),
+      waist: te.waist,
+      numericalAperture: te.numericalAperture,
+      fNumber: te.fNumber,
+      apertureThroughput: te.apertureThroughput,
+      length: te.length,
+    };
+  }
+
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
   }
@@ -2067,10 +2374,15 @@ footer {
   }
 
   function updateResults(result, elapsedMs) {
-    element.modeLabel.innerHTML = formatModeHtml(state.mode);
+    const isMultimode = Boolean(result.multimode);
+    element.modeLabel.innerHTML = isMultimode
+      ? "TE<sub>11</sub> + TM<sub>11</sub>"
+      : formatModeHtml(state.mode);
     setText("frequencyLabel", `${state.frequencyTHz.toFixed(2)} THz`);
     setText("cutoffValue", (result.cutoffHz / 1e9).toFixed(2));
-    element.cutoffFormula.innerHTML = `f<sub>c</sub>(${formatModeHtml(state.mode)})`;
+    element.cutoffFormula.innerHTML = isMultimode
+      ? "both-mode cutoff (TM<sub>11</sub>)"
+      : `f<sub>c</sub>(${formatModeHtml(state.mode)})`;
     setText("waistValue", (result.waist * 1e3).toFixed(3));
     setText("naValue", result.numericalAperture.toFixed(3));
     setText("fNumberValue", `f/${result.fNumber.toFixed(2)}`);
@@ -2087,24 +2399,39 @@ footer {
         : "— dB m⁻¹",
     );
     setText("delayValue", formatFinite(result.relativeGroupDelayPs, 2));
-    setText("rootValue", result.mode.root.toFixed(5));
-    setText(
-      "betaValue",
-      result.propagating ? `${(result.beta / 1e3).toFixed(2)} mm⁻¹` : "imaginary",
-    );
+    setText("rootValue", isMultimode ? "1.84118 / 3.83171" : result.mode.root.toFixed(5));
+    setText("betaValue", isMultimode
+      ? (Number.isFinite(result.deltaBeta) ? `Δβ ${(result.deltaBeta / 1e3).toFixed(3)} mm⁻¹` : "imaginary")
+      : (result.propagating ? `${(result.beta / 1e3).toFixed(2)} mm⁻¹` : "imaginary"));
     setText("apertureValue", `${(result.apertureThroughput * 100).toFixed(1)}%`);
     setText("solverTime", `${elapsedMs.toFixed(1)} ms`);
 
-    element.fieldStatus.textContent = result.propagating ? "Propagating" : "Evanescent";
+    element.fieldStatus.textContent = result.propagating
+      ? (isMultimode ? "Coherent interference" : "Propagating")
+      : "Evanescent";
     element.fieldStatus.classList.toggle("evanescent", !result.propagating);
     element.statusCard.classList.toggle("evanescent", !result.propagating);
-    setText("propagationStatus", result.propagating ? "Propagating" : "Below cutoff");
+    setText("propagationStatus", result.propagating
+      ? (isMultimode ? "Two-mode propagation" : "Propagating")
+      : "Below cutoff");
     setText(
       "propagationDetail",
       result.propagating
-        ? "β is real above cutoff"
+        ? (isMultimode
+          ? `TE₁₁/TM₁₁ output phase ${result.outputPhaseDeg.toFixed(1)}°`
+          : "β is real above cutoff")
         : `Raise f above ${(result.cutoffHz / 1e12).toFixed(3)} THz`,
     );
+
+    element.interferenceResults.classList.toggle("hidden", !isMultimode);
+    if (isMultimode) {
+      setText("tePowerValue", `${(result.tePower * 100).toFixed(2)}%`);
+      setText("tmPowerValue", `${(result.tmPower * 100).toFixed(2)}%`);
+      setText("interferencePhaseValue", `${result.outputPhaseDeg.toFixed(1)}°`);
+      setText("beatLengthValue", Number.isFinite(result.beatLength)
+        ? `${(result.beatLength * 1e3).toFixed(2)} mm`
+        : "∞");
+    }
   }
 
   function resizeCanvas(canvas) {
@@ -2277,12 +2604,95 @@ footer {
     context.shadowBlur = 0;
   }
 
+  function drawInterferenceField(result) {
+    const { context, width, height } = resizeCanvas(element.fieldCanvas);
+    const teCache = getSpatialCache("TE11");
+    const tmCache = getSpatialCache("TM11");
+    const padding = 18;
+    const diameter = Math.max(80, Math.min(width, height) - padding * 2);
+    const left = (width - diameter) * 0.5;
+    const top = (height - diameter) * 0.5;
+    const cell = diameter / teCache.resolution;
+    const teFactor = Math.sqrt(Math.max(0, result.tePower)) / Math.sqrt(teCache.fieldIntegral);
+    const tmFactor = Math.sqrt(Math.max(0, result.tmPower)) / Math.sqrt(tmCache.fieldIntegral);
+    const phaseProjection = Math.cos(result.phaseRad);
+    const combined = [];
+    let maxField = 0;
+
+    for (let i = 0; i < teCache.points.length; i += 1) {
+      const tePoint = teCache.points[i];
+      const tmPoint = tmCache.points[i];
+      const ex = teFactor * tePoint.baseEx + tmFactor * phaseProjection * tmPoint.baseEx;
+      const ey = teFactor * tePoint.baseEy + tmFactor * phaseProjection * tmPoint.baseEy;
+      combined.push({ ...tePoint, ex, ey });
+      maxField = Math.max(maxField, Math.abs(ex), Math.abs(ey));
+    }
+    maxField = maxField || 1;
+
+    context.clearRect(0, 0, width, height);
+    context.fillStyle = "#050c14";
+    context.fillRect(0, 0, width, height);
+    for (const point of combined) {
+      context.fillStyle = fieldColor(point.ex / maxField, !result.propagating);
+      context.fillRect(
+        left + point.col * cell,
+        top + point.row * cell,
+        cell + 0.75,
+        cell + 0.75,
+      );
+    }
+
+    context.save();
+    context.beginPath();
+    context.arc(width * 0.5, height * 0.5, diameter * 0.5, 0, TWO_PI);
+    context.clip();
+    context.setLineDash([5, 6]);
+    context.strokeStyle = "rgba(160, 192, 208, 0.35)";
+    context.lineWidth = 1;
+    context.beginPath();
+    context.moveTo(left, height * 0.5);
+    context.lineTo(left + diameter, height * 0.5);
+    context.moveTo(width * 0.5, top);
+    context.lineTo(width * 0.5, top + diameter);
+    context.stroke();
+    context.setLineDash([]);
+
+    const arrowStep = 15;
+    for (const point of combined) {
+      if (point.row % arrowStep !== 7 || point.col % arrowStep !== 7) continue;
+      const magnitude = clamp(Math.hypot(point.ex, point.ey) / maxField, 0, 1);
+      drawArrow(
+        context,
+        left + point.col * cell,
+        top + point.row * cell,
+        point.ex / maxField,
+        point.ey / maxField,
+        cell * arrowStep * 0.72,
+        result.propagating ? 0.25 + 0.65 * magnitude : 0.18,
+      );
+    }
+    context.restore();
+
+    context.beginPath();
+    context.arc(width * 0.5, height * 0.5, diameter * 0.5 + 1, 0, TWO_PI);
+    context.strokeStyle = result.propagating ? "#f5a524" : "#ff5577";
+    context.lineWidth = 2;
+    context.shadowColor = result.propagating
+      ? "rgba(245, 165, 36, 0.48)"
+      : "rgba(255, 85, 119, 0.42)";
+    context.shadowBlur = 9;
+    context.stroke();
+    context.shadowBlur = 0;
+  }
+
   function frequencySweep() {
     const points = [];
     const count = 121;
     for (let i = 0; i < count; i += 1) {
       const frequencyTHz = 0.1 + (1.9 * i) / (count - 1);
-      const result = solve({ ...state, frequencyTHz });
+      const result = state.interferenceEnabled
+        ? solveInterference({ ...state, frequencyTHz })
+        : solve({ ...state, frequencyTHz });
       points.push({
         frequencyTHz,
         outputPercent: result.outputPower * 100,
@@ -2447,6 +2857,9 @@ footer {
     for (const button of element.modeButtons.querySelectorAll(".mode-button")) {
       button.classList.toggle("active", button.dataset.mode === state.mode);
     }
+    element.interferenceToggle.checked = state.interferenceEnabled;
+    element.interferenceControls.classList.toggle("inactive", !state.interferenceEnabled);
+    element.modeButtons.classList.toggle("inactive", state.interferenceEnabled);
   }
 
   function scheduleRender() {
@@ -2460,8 +2873,9 @@ footer {
 
   function render() {
     const started = performance.now();
-    const result = solve();
-    drawField(result);
+    const result = state.interferenceEnabled ? solveInterference() : solve();
+    if (state.interferenceEnabled) drawInterferenceField(result);
+    else drawField(result);
     drawSpectrum(result);
     updateResults(result, performance.now() - started);
   }
@@ -2522,8 +2936,44 @@ footer {
   }
 
   function exportCsv() {
-    const rows = [
-      [
+    const rows = [];
+    if (state.interferenceEnabled) {
+      rows.push([
+        "frequency_thz",
+        "modes",
+        "tm11_amplitude_factor",
+        "input_relative_phase_deg",
+        "output_relative_phase_deg",
+        "beat_length_mm",
+        "te11_output_power_fraction",
+        "tm11_output_power_fraction",
+        "combined_output_power_fraction",
+        "combined_coupling",
+        "effective_loss_db_per_m",
+        "effective_total_loss_db",
+        "weighted_group_delay_ps",
+      ]);
+      for (let i = 0; i <= 190; i += 1) {
+        const frequencyTHz = 0.1 + i * 0.01;
+        const result = solveInterference({ ...state, frequencyTHz });
+        rows.push([
+          frequencyTHz.toFixed(2),
+          "TE11+TM11",
+          state.tmAmplitude.toFixed(4),
+          state.relativePhaseDeg.toFixed(2),
+          csvValue(result.outputPhaseDeg, 6),
+          csvValue(result.beatLength * 1e3, 8),
+          result.tePower.toFixed(8),
+          result.tmPower.toFixed(8),
+          result.outputPower.toFixed(8),
+          result.coupling.toFixed(8),
+          csvValue(result.lossDbPerM),
+          csvValue(result.totalLossDb),
+          csvValue(result.relativeGroupDelayPs),
+        ]);
+      }
+    } else {
+      rows.push([
         "frequency_thz",
         "mode",
         "cutoff_thz",
@@ -2534,24 +2984,23 @@ footer {
         "total_loss_db",
         "output_power_fraction",
         "relative_group_delay_ps",
-      ],
-    ];
-
-    for (let i = 0; i <= 190; i += 1) {
-      const frequencyTHz = 0.1 + i * 0.01;
-      const result = solve({ ...state, frequencyTHz });
-      rows.push([
-        frequencyTHz.toFixed(2),
-        state.mode,
-        (result.cutoffHz / 1e12).toFixed(8),
-        (result.waist * 1e3).toFixed(8),
-        result.apertureThroughput.toFixed(8),
-        result.coupling.toFixed(8),
-        csvValue(result.lossDbPerM),
-        csvValue(result.totalLossDb),
-        result.outputPower.toFixed(8),
-        csvValue(result.relativeGroupDelayPs),
       ]);
+      for (let i = 0; i <= 190; i += 1) {
+        const frequencyTHz = 0.1 + i * 0.01;
+        const result = solve({ ...state, frequencyTHz });
+        rows.push([
+          frequencyTHz.toFixed(2),
+          state.mode,
+          (result.cutoffHz / 1e12).toFixed(8),
+          (result.waist * 1e3).toFixed(8),
+          result.apertureThroughput.toFixed(8),
+          result.coupling.toFixed(8),
+          csvValue(result.lossDbPerM),
+          csvValue(result.totalLossDb),
+          result.outputPower.toFixed(8),
+          csvValue(result.relativeGroupDelayPs),
+        ]);
+      }
     }
 
     const blob = new Blob([rows.map((row) => row.join(",")).join("\n")], {
@@ -2560,7 +3009,9 @@ footer {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `thz-waveguide-${state.mode.toLowerCase()}-spectrum.csv`;
+    link.download = state.interferenceEnabled
+      ? "thz-waveguide-te11-tm11-interference.csv"
+      : `thz-waveguide-${state.mode.toLowerCase()}-spectrum.csv`;
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -2601,6 +3052,13 @@ footer {
       const button = event.target.closest(".mode-button");
       if (!button) return;
       state.mode = button.dataset.mode;
+      state.interferenceEnabled = false;
+      syncControlsFromState();
+      scheduleRender();
+    });
+
+    element.interferenceToggle.addEventListener("change", () => {
+      state.interferenceEnabled = element.interferenceToggle.checked;
       syncControlsFromState();
       scheduleRender();
     });
@@ -2654,7 +3112,14 @@ footer {
       "lensDiameterNumber",
       "fillRange",
       "fillNumber",
+      "tmAmplitudeRange",
+      "tmAmplitudeNumber",
+      "relativePhaseRange",
+      "relativePhaseNumber",
       "modeButtons",
+      "interferenceToggle",
+      "interferenceControls",
+      "interferenceResults",
       "resetButton",
       "exportButton",
       "fieldCanvas",
@@ -2679,6 +3144,10 @@ footer {
       "rootValue",
       "betaValue",
       "apertureValue",
+      "tePowerValue",
+      "tmPowerValue",
+      "interferencePhaseValue",
+      "beatLengthValue",
       "solverTime",
     ];
     for (const id of ids) element[id] = document.getElementById(id);
